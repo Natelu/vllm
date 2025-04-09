@@ -125,6 +125,8 @@ class GPUModelRunner(LoRAModelRunnerMixin):
             self.model_config.is_attention_free,
             use_mla=self.model_config.use_mla,
         )
+
+        print(f'************ self.attn_backend is  {self.attn_backend} \n')
         if self.attn_backend is None:
             error_msg = (
                 f"Error with get_att_backend: {self.head_size=}, "
@@ -135,6 +137,8 @@ class GPUModelRunner(LoRAModelRunnerMixin):
             raise NotImplementedError(
                 "Non-Attention backend is not supported by V1 GPUModelRunner.")
 
+        attrs = vars(self.attn_backend)
+        print(attrs)
         self.attn_metadata_builder = self.attn_backend.get_builder_cls()(
             weakref.proxy(self))
         self.cascade_attn_enabled = not self.model_config.disable_cascade_attn
